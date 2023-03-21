@@ -48,7 +48,7 @@ export interface Link
 export class TableComponent implements AfterViewInit {
   displayedColumns: string[] = ['id', 'birthDate', 'firstName','lastName','gender','hireDate'];
 
-
+  dataSources = new MatTableDataSource<risposta>();
   @ViewChild(MatTable)
   table!: MatTable<risposta>;
   @ViewChild(MatPaginator)
@@ -56,7 +56,7 @@ export class TableComponent implements AfterViewInit {
 
 
   ngAfterViewInit() {
-    this.data.paginator = this.paginator;
+    this.dataSources.paginator = this.paginator;
   }
 
   constructor(private restClient:DataServiceService)
