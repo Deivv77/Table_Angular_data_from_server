@@ -10,10 +10,12 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { DataServiceService } from './data-service.service';
 import { HttpClientModule } from '@angular/common/http';
 
+
 @NgModule({
   declarations: [
     AppComponent,
-    TableComponent
+    TableComponent,
+    
   ],
   imports: [
     BrowserModule,

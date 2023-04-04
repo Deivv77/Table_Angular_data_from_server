@@ -4,35 +4,9 @@ import {MatTable} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import { DataServiceService } from '../data-service.service';
+import { Employee, ServerData } from '../types/Employee';
 
-export interface dati {
-  id: any;
-  birthDate: any;
-  firstName: any;
-  lastName: any;
-  gender: any;
-  hireDate : any;
-}
-export interface risposta{
-  _embedded: embedded;
-  _links: links;
-  page:any;
-}
-export interface links{
-  self:Link;
-  first:Link;
-  prev:Link;
-  next:Link;
-  last:Link;
-  profile:Link;
-}
-export interface embedded{
-  employees:[dati];
-}
-export interface Link
-{
-  href: string;
-}
+
 
 
 
@@ -47,10 +21,10 @@ export interface Link
 
 export class TableComponent implements AfterViewInit {
   displayedColumns: string[] = ['id', 'birthDate', 'firstName','lastName','gender','hireDate'];
-
-  dataSources = new MatTableDataSource<risposta>();
+  data : ServerData | undefined;
+  dataSources = new MatTableDataSource<Employee>();
   @ViewChild(MatTable)
-  table!: MatTable<risposta>;
+  table!: MatTable<Employee>;
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
@@ -61,20 +35,34 @@ export class TableComponent implements AfterViewInit {
 
   constructor(private restClient:DataServiceService)
   {
-    this.loadData();
+    this.loadData("http://localhost:8080/employees");
+    this.dataSources = new MatTableDataSource(this.data?._embedded.employees);
   }
 
-  data : any;
-  error : any;
-
-  loadData(): void
+  
+  loadData(url : string)
   {
-    this.restClient.getDataRows("http://localhost:8080/employees").subscribe
-    (
-      data => this.data = data._embedded.employees,
+    this.restClient.getDataRows(url).subscribe(
+      serverResponse => {
+        this.data = serverResponse;
+        this.dataSources.data = this.data._embedded.employees;
+      }
     )
+
   }
 
+  nextPage(){
+    if(this.data) this.loadData(this.data._links.next.href);
+  }
+  prevPage(){
+    if(this.data) this.loadData(this.data._links.self.href);
+  }
+  firstPage(){
+    if(this.data) this.loadData(this.data._links.first.href);
+  }
+  lastPage(){
+    if(this.data) this.loadData(this.data._links.last.href);
+  }
 }
 
 
