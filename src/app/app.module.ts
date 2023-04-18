@@ -10,12 +10,15 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { DataServiceService } from './data-service.service';
 import { HttpClientModule } from '@angular/common/http';
 import {MatButtonModule} from '@angular/material/button';
+import { FormsComponent } from './forms/forms.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     TableComponent,
+    FormsComponent,
     
   ],
   imports: [
@@ -25,7 +28,8 @@ import {MatButtonModule} from '@angular/material/button';
     MatTableModule,
     MatPaginatorModule,
     HttpClientModule,
-    MatButtonModule
+    MatButtonModule,
+    ReactiveFormsModule
   ],
   providers: [DataServiceService],
   bootstrap: [AppComponent]

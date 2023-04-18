@@ -73,6 +73,9 @@ export class TableComponent implements AfterViewInit {
     });
     
   }
+  /*editRow(index : number){
+
+  }*/
 }
 
 
