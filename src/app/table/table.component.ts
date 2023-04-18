@@ -20,13 +20,14 @@ import { Employee, ServerData } from '../types/Employee';
 
 
 export class TableComponent implements AfterViewInit {
-  displayedColumns: string[] = ['id', 'birthDate', 'firstName','lastName','gender','hireDate'];
-  data : ServerData | undefined;
+  displayedColumns: string[] = ['id', 'birthDate', 'firstName','lastName','gender','hireDate', 'deleteRow'];
+  data : any;
   dataSources = new MatTableDataSource<Employee>();
   @ViewChild(MatTable)
   table!: MatTable<Employee>;
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
+  Current : any;
 
 
   ngAfterViewInit() {
@@ -46,22 +47,31 @@ export class TableComponent implements AfterViewInit {
       serverResponse => {
         this.data = serverResponse;
         this.dataSources.data = this.data._embedded.employees;
+        this.Current = url;
       }
     )
 
   }
 
+
+
   nextPage(){
     if(this.data) this.loadData(this.data._links.next.href);
   }
   prevPage(){
-    if(this.data) this.loadData(this.data._links.self.href);
+    if(this.data) this.loadData(this.data._links.prev.href);
   }
   firstPage(){
     if(this.data) this.loadData(this.data._links.first.href);
   }
   lastPage(){
     if(this.data) this.loadData(this.data._links.last.href);
+  }
+  deleteRow(index : number){
+    this.restClient.remove(index).subscribe(()=> {
+      this.loadData(this.Current);
+    });
+    
   }
 }
 

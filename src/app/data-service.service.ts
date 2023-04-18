@@ -17,5 +17,8 @@ export class DataServiceService {
       retry(2)
     )
   }
+  remove(index : number){
+    return this.http.delete("http://localhost:8080/employees/" + index);
+  }
 }
 
