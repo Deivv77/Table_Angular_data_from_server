@@ -20,5 +20,8 @@ export class DataServiceService {
   remove(index : number){
     return this.http.delete("http://localhost:8080/employees/" + index);
   }
+  postData(employee: Employee): Observable<ServerData>{
+    return this.http.post<ServerData>("http://localhost:8080/employees", employee);
+  }
 }
 
